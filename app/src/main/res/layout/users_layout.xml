@@ -20,4 +20,22 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:hint="password" />
+
+    <Button
+        android:id="@+id/deleteUser"
+        android:layout_width="50dp"
+        android:layout_height="30dp"
+        android:layout_weight="0"
+        android:background="#E91E63"
+        android:onClick="deleteFromDatabase"
+        android:text="Del" />
+
+    <Button
+        android:id="@+id/updateButton"
+        android:layout_width="50dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="3sp"
+        android:layout_weight="0"
+        android:background="#4CAF50"
+        android:text="Up" />
 </LinearLayout>

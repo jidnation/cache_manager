@@ -62,4 +62,12 @@ public class DBManager  {
 
          return queryBuilder.query(sqLiteDatabase ,projection, selection, selectionArgs, null, null, sortOrder );
     }
+
+    public int delete(String selection, String[] selectionArgs) {
+        return sqLiteDatabase.delete(tableName, selection, selectionArgs);
+    }
+
+    public int update(ContentValues values, String selection, String[] selectionArgs) {
+        return sqLiteDatabase.update(tableName, values, selection, selectionArgs);
+    }
 }

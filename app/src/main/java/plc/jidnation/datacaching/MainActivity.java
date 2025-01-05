@@ -101,18 +101,23 @@ public class MainActivity extends AppCompatActivity {
         passwordText.setText("");
     }
 
-    @SuppressLint("Range")
     public void loadFromDatabase(View view) {
+    loadElement(view);
+    }
 
+    @SuppressLint("Range")
+    public void loadElement(View view){
+        users.clear();
+        String[] selectionArgs = {"%" + usernameText.getText().toString() +  "%"};
         Cursor cursor = dataManager.query(
-                null, null, null,
+                null, "userName like ? ", selectionArgs,
                 DBManager.columnUsername
         );
         if (cursor.moveToFirst()) {
 //            StringBuilder tableData = new StringBuilder();
             do {
                 final String username = cursor.getString(cursor.getColumnIndex(DBManager.columnUsername));
-                final String password = cursor.getString(cursor.getColumnIndex(DBManager.columnPassword));
+                 final String password = cursor.getString(cursor.getColumnIndex(DBManager.columnPassword));
 
 //    tableData.append(cursor.getString(cursor.getColumnIndex(DBManager.columnUsername))).append(cursor.getString(cursor.getColumnIndex(DBManager.columnPassword)))
 //            .append(": :");
@@ -141,9 +146,11 @@ public class MainActivity extends AppCompatActivity {
                 toast.show();
 
             });
-
             listView.setAdapter(myListAdapter);
         }
+    }
+
+    public void deleteFromDatabase(View view) {
     }
 
     private class UserListHandler extends BaseAdapter{
@@ -175,9 +182,24 @@ public class MainActivity extends AppCompatActivity {
 
             TextView username = view.findViewById(R.id.item_username);
             TextView password = view.findViewById(R.id.item_password);
+            Button deleteButton = view.findViewById(R.id.deleteUser);
+            Button updateButton = view.findViewById(R.id.updateButton);
 
             username.setText(userInfo.username);
             password.setText(userInfo.password);
+            deleteButton.setOnClickListener(v -> {
+                dataManager.delete(DBManager.columnUsername + "=?", new String[]{userInfo.username});
+                userList.remove(userInfo);
+                notifyDataSetChanged();
+            });
+            updateButton.setOnClickListener(v -> {
+                // Update user credentials
+                ContentValues values = new ContentValues();
+                values.put(DBManager.columnUsername, usernameText.getText().toString());
+                values.put(DBManager.columnPassword, userInfo.password);
+                dataManager.update(values, DBManager.columnUsername + "=?", new String[]{userInfo.username});
+                loadElement(v);
+            });
 
             return view;
         }
